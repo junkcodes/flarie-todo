@@ -60,8 +60,5 @@ jobs:
           IdentityFile ~/.ssh/vm.key
           StrictHostKeyChecking no
         END
-    - name: test
-      run: |
-        cat ~/.ssh/config
-        cat ~/.ssh/vm.key
-        ssh vm -p 12904 "uname -a"
+    - name: Transferring K8s Manifest file for the App 
+      run: scp k8s-manifest/deployment.yml vm:/tmp -p 12904 
