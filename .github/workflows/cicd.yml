@@ -58,4 +58,4 @@ jobs:
         ssh -p 12904 groot@0.tcp.in.ngrok.io
 
     - name: test
-      run: whomai && uname -a
+      run: whoami && uname -a
