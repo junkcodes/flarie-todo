@@ -64,20 +64,27 @@ jobs:
 #       run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
 #     - name: Deploy App to the Kubernetes
 #       run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
-  build:
-    name: Build
+  deploy-via-ssh-geeky-style:
+    name: Deploy App to Kubernetes via SSH Geeky Style
     runs-on: ubuntu-latest
     steps:
+    - uses: actions/checkout@v3
     - name: Prepare SSH Key
-      run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key 
-        chmod 600 vm.key
-        cat vm.key
-    - name: executing remote ssh commands using password
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key
+    - name: Transfer K8s Manifest file for the App 
+      uses: appleboy/scp-action@v0.1.4
+      with:
+        host: 0.tcp.in.ngrok.io
+        username: groot
+        key_path: vm.key 
+        port: 12904
+        source: k8s-manifest/deployment.yml
+        target: tmp/deployment.yml
+    - name: Deploy App to the Kubernetes
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
         key_path: vm.key 
         port: 12904
-        script: whoami
+        script: kubectl apply -f /tmp/deployment.yml -n flarie
