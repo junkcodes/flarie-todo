@@ -56,6 +56,7 @@ jobs:
         ssh-keyscan -p 12904 -H 0.tcp.in.ngrok.io >> ~/.ssh/known_hosts
         chmod 644 ~/.ssh/known_hosts
         ssh -p 12904 groot@0.tcp.in.ngrok.io
+        whoami
 
     - name: test
       run: whoami && uname -a
