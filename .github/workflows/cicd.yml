@@ -70,14 +70,14 @@ jobs:
     steps:
     - name: Prepare SSH Key
       run: |
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/vm.key 
-        chmod 600 ~/vm.key
-        cat ~/vm.key
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key 
+        chmod 600 vm.key
+        cat vm.key
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
-        key_path: ~/vm.key 
+        key_path: vm.key 
         port: 12904
         script: whoami
