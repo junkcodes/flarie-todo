@@ -43,24 +43,40 @@ jobs:
 #           tags: junkcodes/flarie:gs
           
           
-  deploy-via-ssh-bangla-style:
-    name: Deploy App to Kubernetes via SSH Bangla Style
+#   deploy-via-ssh-bangla-style:
+#     name: Deploy App to Kubernetes via SSH Bangla Style
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#     - name: Configure SSH Client
+#       run: |
+#         mkdir -p ~/.ssh/
+#         echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
+#         chmod 600 ~/.ssh/vm.key
+#         cat >>~/.ssh/config <<END
+#         Host vm
+#           HostName 0.tcp.in.ngrok.io
+#           User groot
+#           IdentityFile ~/.ssh/vm.key
+#           StrictHostKeyChecking no
+#         END
+#     - name: Transfer K8s Manifest file for the App 
+#       run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
+#     - name: Deploy App to the Kubernetes
+#       run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
+  build:
+    name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
-    - name: Configure SSH Client
-      run: |
-        mkdir -p ~/.ssh/
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
-        chmod 600 ~/.ssh/vm.key
-        cat >>~/.ssh/config <<END
-        Host vm
-          HostName 0.tcp.in.ngrok.io
-          User groot
-          IdentityFile ~/.ssh/vm.key
-          StrictHostKeyChecking no
-        END
-    - name: Transfer K8s Manifest file for the App 
-      run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
-    - name: Deploy App to the Kubernetes
-      run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
+    - name: test
+      env:
+        PRIVATE-KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+      run: PRIVATE-KEY=$(echo "$PRIVATE-KEY" | base64 -d)
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: 0.tcp.in.ngrok.io
+        username: groot
+        key: $PRIVATE-KEY 
+        port: ${{ secrets.PORT }}
+        script: whoami
