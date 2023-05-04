@@ -71,12 +71,12 @@ jobs:
     - name: test
       env:
         PRIVATE-KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: PRIVATE-KEY=$(echo "$PRIVATE-KEY" | base64 -d)
+      run: $(PRIVATE-KEY=$(echo "$PRIVATE-KEY" | base64 -d))
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
         key: $PRIVATE-KEY 
-        port: ${{ secrets.PORT }}
+        port: 
         script: whoami
