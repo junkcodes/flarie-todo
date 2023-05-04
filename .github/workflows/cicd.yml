@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Configuring SSH Client
+    - name: Configure SSH Client
       run: |
         mkdir -p ~/.ssh/
         echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
@@ -60,5 +60,7 @@ jobs:
           IdentityFile ~/.ssh/vm.key
           StrictHostKeyChecking no
         END
-    - name: Transferring K8s Manifest file for the App 
+    - name: Transfer K8s Manifest file for the App 
       run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
+    - name: Deploy App to the Kubernetes
+      run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
