@@ -47,7 +47,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: test
+    - name: Configuring SSH Client
       run: |
-        ls -la
-        systemctl status sshd
+        echo ${{ secrets.SSH_PRIVATE_KEY }} | tr -d '\r' | ssh-add -
+        mkdir -p ~/.ssh
+        chmod 700 ~/.ssh
+        ssh-keyscan -p 12904 -H 0.tcp.in.ngrok.io >> ~/.ssh/known_hosts
+        chmod 644 ~/.ssh/known_hosts
+    - name: Connecting to VM via SSH
+      run: ssh -p 12904 groot@0.tcp.in.ngrok.io
+    - name: test
+      run: whomai && uname -a
