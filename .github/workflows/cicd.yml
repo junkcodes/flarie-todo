@@ -51,7 +51,7 @@ jobs:
     - name: Configuring SSH Client
       run: |
         mkdir -p ~/.ssh/
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/vm.key
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
         chmod 600 ~/.ssh/vm.key
         cat >>~/.ssh/config <<END
         Host vm
@@ -61,4 +61,7 @@ jobs:
           StrictHostKeyChecking no
         END
     - name: test
-      run: ssh vm -p 12904 "uname -a"
+      run: |
+        cat ~/.ssh/config
+        cat ~/.ssh/vm.key
+        ssh vm -p 12904 "uname -a"
