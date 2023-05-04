@@ -69,12 +69,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Prepare SSH Key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key && chmod 600 ~/.ssh/vm.key
+      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/vm.key && chmod 600 ~/vm.key
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
-        key_path: ~/.ssh/vm.key 
+        key_path: ~/vm.key 
         port: 12904
         script: whoami
