@@ -80,6 +80,7 @@ jobs:
         port: 12904
         source: "k8s-manifest/deployment.yml"
         target: /tmp
+        strip_components: 1
     - name: Deploy App to the Kubernetes
       uses: appleboy/ssh-action@v0.1.10
       with:
