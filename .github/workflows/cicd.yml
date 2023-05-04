@@ -61,4 +61,4 @@ jobs:
           StrictHostKeyChecking no
         END
     - name: Transferring K8s Manifest file for the App 
-      run: scp k8s-manifest/deployment.yml vm:/tmp -p 12904 
+      run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
