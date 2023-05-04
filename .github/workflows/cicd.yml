@@ -78,8 +78,8 @@ jobs:
         username: groot
         key_path: vm.key 
         port: 12904
-        source: k8s-manifest/deployment.yml
-        target: tmp/deployment.yml
+        source: "k8s-manifest/deployment.yml"
+        target: /tmp
     - name: Deploy App to the Kubernetes
       uses: appleboy/ssh-action@v0.1.10
       with:
