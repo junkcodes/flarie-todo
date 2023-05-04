@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flarie-app
+  labels:
+    app: flarie-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: flarie-app
+  template:
+    metadata:
+      labels:
+        app: flarie-app
+    spec:
+      containers:
+      - name: flarie-app
+        imagePullPolicy: Always
+        image: junkcodes/flarie:bs
+        env:
+        - name: MYSQL_HOST
+          value: mysql-service.default
+        - name: MYSQL_USER
+          value: flarie
+        - name: MYSQL_PASSWORD
+          value: flarie
+        - name: MYSQL_DB
+          value: flarie
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: flarie-app-service
+spec:
+  type: NodePort
+  selector:
+    app: flarie-app  
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+      nodePort: 32100
