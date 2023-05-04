@@ -1,7 +1,4 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
-
-name: Node.js CI
+name: Flarie App CI CD
 
 on:
   push:
@@ -15,6 +12,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: testing
-      run: uname -a
+    - name: Login to Registry
+      run: echo "${{ secrets.DOCKERPW }}" | docker login -u "junkcodes" --password-stdin
+    - name: Build Image
+      run: docker build -t junkcodes/flarie:bs -f dockerfile/Dockerfile .
+    - name: Push Image
+      run: docker push junkcodes/flarie:bs
 
