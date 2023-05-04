@@ -50,12 +50,15 @@ jobs:
     - uses: actions/checkout@v3
     - name: Configuring SSH Client
       run: |
-        eval $(ssh-agent -s)
-        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d | tr -d '\r' | ssh-add -
-        mkdir -p ~/.ssh
-        chmod 700 ~/.ssh
-        ssh-keyscan -p 12904 -H 0.tcp.in.ngrok.io >> ~/.ssh/known_hosts
-        chmod 644 ~/.ssh/known_hosts
-        ssh -p 12904 groot@0.tcp.in.ngrok.io "uname -a"
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/vm.key
+        chmod 600 ~/.ssh/vm.key
+        cat >>~/.ssh/config <<END
+        Host vm
+          HostName 0.tcp.in.ngrok.io
+          User groot
+          IdentityFile ~/.ssh/vm.key
+          StrictHostKeyChecking no
+        END
     - name: test
-      run: ssh -T -p 12904 groot@0.tcp.in.ngrok.io "whoami"
+      run: ssh vm -p 12904 "uname -a"
