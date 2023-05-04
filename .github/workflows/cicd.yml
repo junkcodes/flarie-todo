@@ -69,14 +69,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: test
-      env:
-        PRIVATE-KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-      run: env
+      run: export PRIVATE-KEY=$( echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d)
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
         key: $PRIVATE-KEY 
-        port: 
+        port: 12904
         script: whoami
