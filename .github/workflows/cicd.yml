@@ -50,4 +50,4 @@ jobs:
     - name: test
       run: |
         ls -la
-        ls -la .ssh
+        systemctl status sshd
