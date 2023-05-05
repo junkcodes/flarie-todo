@@ -22,27 +22,27 @@ jobs:
 #       run: docker push junkcodes/flarie:bs
 
 
-#   build-image-geeky-style:
-#     name: Build and Push App Image to Registry Geeky Style
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Set up QEMU
-#         uses: docker/setup-qemu-action@v2
-#       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
-#       - name: Login to Docker Hub
-#         uses: docker/login-action@v2
-#         with:
-#           username: junkcodes
-#           password: ${{ secrets.DOCKERPW }}
-#       - name: Build and push
-#         uses: docker/build-push-action@v4
-#         with:
-#           file: dockerfile/Dockerfile
-#           push: true
-#           tags: junkcodes/flarie:gs
+  build-image-geeky-style:
+    name: Build and Push App Image to Registry Geeky Style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: junkcodes
+          password: ${{ secrets.DOCKERPW }}
+      - name: Build and Push App Image
+        uses: docker/build-push-action@v4
+        with:
+          file: dockerfile/Dockerfile
+          push: true
+          tags: junkcodes/flarie:gs
           
-          
+
 #   deploy-via-ssh-bangla-style:
 #     name: Deploy App to Kubernetes via SSH Bangla Style
 #     runs-on: ubuntu-latest
@@ -64,7 +64,10 @@ jobs:
 #       run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
 #     - name: Deploy App to the Kubernetes
 #       run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
+
+
   deploy-via-ssh-geeky-style:
+    needs: build-image-geeky-style
     name: Deploy App to Kubernetes via SSH Geeky Style
     runs-on: ubuntu-latest
     steps:
