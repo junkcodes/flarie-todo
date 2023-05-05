@@ -9,86 +9,87 @@ on:
 jobs:
 
 
-#   build-image-bangla-style:
-#     name: Build and Push App Image to Registry Bangla Style
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Login to Registry
-#       run: echo "${{ secrets.DOCKERPW }}" | docker login -u "junkcodes" --password-stdin
-#     - name: Build Image
-#       run: docker build -t junkcodes/flarie:bs -f dockerfile/Dockerfile .
-#     - name: Push Image
-#       run: docker push junkcodes/flarie:bs
-
-
-  build-image-geeky-style:
-    name: Build and Push App Image to Registry Geeky Style
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: junkcodes
-          password: ${{ secrets.DOCKERPW }}
-      - name: Build and Push App Image
-        uses: docker/build-push-action@v4
-        with:
-          file: dockerfile/Dockerfile
-          push: true
-          tags: junkcodes/flarie:gs
-          
-
-#   deploy-via-ssh-bangla-style:
-#     name: Deploy App to Kubernetes via SSH Bangla Style
-#     runs-on: ubuntu-latest
-#     steps:
-#     - uses: actions/checkout@v3
-#     - name: Configure SSH Client
-#       run: |
-#         mkdir -p ~/.ssh/
-#         echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
-#         chmod 600 ~/.ssh/vm.key
-#         cat >>~/.ssh/config <<END
-#         Host vm
-#           HostName 0.tcp.in.ngrok.io
-#           User groot
-#           IdentityFile ~/.ssh/vm.key
-#           StrictHostKeyChecking no
-#         END
-#     - name: Transfer K8s Manifest file for the App 
-#       run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
-#     - name: Deploy App to the Kubernetes
-#       run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
-
-
-  deploy-via-ssh-geeky-style:
-    needs: build-image-geeky-style
-    name: Deploy App to Kubernetes via SSH Geeky Style
+  build-image-bangla-style:
+    name: Build and Push App Image to Registry Bangla Style
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-    - name: Prepare SSH Key
-      run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key
+    - name: Login to Registry
+      run: echo "${{ secrets.DOCKERPW }}" | docker login -u "junkcodes" --password-stdin
+    - name: Build Image
+      run: docker build -t junkcodes/flarie:bs -f dockerfile/Dockerfile .
+    - name: Push Image
+      run: docker push junkcodes/flarie:bs
+
+
+#   build-image-geeky-style:
+#     name: Build and Push App Image to Registry Geeky Style
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Set up QEMU
+#         uses: docker/setup-qemu-action@v2
+#       - name: Set up Docker Buildx
+#         uses: docker/setup-buildx-action@v2
+#       - name: Login to Docker Hub
+#         uses: docker/login-action@v2
+#         with:
+#           username: junkcodes
+#           password: ${{ secrets.DOCKERPW }}
+#       - name: Build and Push App Image
+#         uses: docker/build-push-action@v4
+#         with:
+#           file: dockerfile/Dockerfile
+#           push: true
+#           tags: junkcodes/flarie:gs
+          
+
+  deploy-via-ssh-bangla-style:
+    needs: build-image-bangla-style
+    name: Deploy App to Kubernetes via SSH Bangla Style
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Configure SSH Client
+      run: |
+        mkdir -p ~/.ssh/
+        echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > ~/.ssh/vm.key
+        chmod 600 ~/.ssh/vm.key
+        cat >>~/.ssh/config <<END
+        Host vm
+          HostName 0.tcp.in.ngrok.io
+          User groot
+          IdentityFile ~/.ssh/vm.key
+          StrictHostKeyChecking no
+        END
     - name: Transfer K8s Manifest file for the App 
-      uses: appleboy/scp-action@v0.1.4
-      with:
-        host: 0.tcp.in.ngrok.io
-        username: groot
-        key_path: vm.key 
-        port: 12904
-        source: "k8s-manifest/deployment.yml"
-        target: /tmp
-        strip_components: 1
+      run: scp -P 12904  k8s-manifest/deployment.yml vm:/tmp
     - name: Deploy App to the Kubernetes
-      uses: appleboy/ssh-action@v0.1.10
-      with:
-        host: 0.tcp.in.ngrok.io
-        username: groot
-        key_path: vm.key 
-        port: 12904
-        script: kubectl apply -f /tmp/deployment.yml -n flarie
+      run: ssh -p 12904 vm "kubectl apply -f /tmp/deployment.yml -n flarie"
+
+
+#   deploy-via-ssh-geeky-style:
+#     needs: build-image-geeky-style
+#     name: Deploy App to Kubernetes via SSH Geeky Style
+#     runs-on: ubuntu-latest
+#     steps:
+#     - uses: actions/checkout@v3
+#     - name: Prepare SSH Key
+#       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key
+#     - name: Transfer K8s Manifest file for the App 
+#       uses: appleboy/scp-action@v0.1.4
+#       with:
+#         host: 0.tcp.in.ngrok.io
+#         username: groot
+#         key_path: vm.key 
+#         port: 12904
+#         source: "k8s-manifest/deployment.yml"
+#         target: /tmp
+#         strip_components: 1
+#     - name: Deploy App to the Kubernetes
+#       uses: appleboy/ssh-action@v0.1.10
+#       with:
+#         host: 0.tcp.in.ngrok.io
+#         username: groot
+#         key_path: vm.key 
+#         port: 12904
+#         script: kubectl apply -f /tmp/deployment.yml -n flarie
