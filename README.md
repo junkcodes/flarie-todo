@@ -29,7 +29,7 @@ Here,
 The forked Nodejs App is designed to work with either MySQL or SQLite DB. While SQLite is a server-less database and can be used in certain scenarios, for the purpose of providing a detailed and comprehensive technical demonstration, MySQL is preferred. To deploy MySQL to our local kubernetes, I have used the following kubernetes manifest file referred as [k8s-manifest/mysql-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/mysql-deployment.yml).    
 For configuring and deploying a MySQL database instance on Kubernetes, you can use the manifest file provided earlier. Otherwise for a more detailed guide, you can refer to the following link, [Run a Single-Instance Stateful MySQL Application](https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/)
 
-> The current version of MySQL 8 and the mysqljs npm package utilized in this application are currently facing authentication issues. This is because MySQL 8 is now using the caching_sha2_password pluggable authentication method as the default instead of the mysql_native_password, which is supported by the mysqljs package. To overcome this issue, get a shell into the running MySQL pod, login to MySQL as root and run the following command,
+> * The current version of MySQL 8 and the mysqljs npm package utilized in this application are currently facing authentication issues. This is because MySQL 8 is now using the caching_sha2_password pluggable authentication method as the default instead of the mysql_native_password, which is supported by the mysqljs package. To overcome this issue, get a shell into the running MySQL pod, login to MySQL as root and run the following command,
 > ```
 > ALTER USER 'username'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
 > FLUSH PRIVILEGES;
@@ -70,15 +70,16 @@ Version                       3.2.2
 Region                        India (in)                                                                      
 Latency                       117ms                                                                           
 Web Interface                 http://127.0.0.1:4040                                                           
-Forwarding                    tcp://0.tcp.in.ngrok.io:14593 -> localhost:22                                   
+Forwarding                    tcp://0.tcp.in.ngrok.io:12904 -> localhost:22                                   
                                                                                                               
 Connections                   ttl     opn     rt1     rt5     p50     p90                                     
                               6       0       0.00    0.00    0.02    5.22                                    
                                                                                    
 ```
 Here,
-> tcp://0.tcp.in.ngrok.io:14593 forwards all TCP requests to localhost:22   
-> For SSH connection through TCP Tunnel tcp://0.tcp.in.ngrok.io:14593, provide HOSTNAME as 0.tcp.in.ngrok.io & PORT as 14593  
+> * tcp://0.tcp.in.ngrok.io:12904 forwards all TCP requests to localhost:22   
+> * For SSH connection through TCP Tunnel tcp://0.tcp.in.ngrok.io:12904, provide HOSTNAME as 0.tcp.in.ngrok.io & PORT as 12904  
+> * Each time the TCP Tunnel is stopped and restarted, the PORT number is expected to change. 
 
 
 ## Prepare GitHub Workflows Action file (Dockerization & Deployment)
@@ -213,5 +214,6 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00                                                                                  
 ```
 Here,
-> For, ngrok http http://192.168.39.42:34567, 192.168.39.42 is the minikube ip & 34567 is the nodeport. Run the command "minikube ip" to get minikube ip.   
-> And https://5e06-202-74-48-126.ngrok-free.app is the public address for our deployed App running on http://192.168.39.42:34567
+> * For, ngrok http http://192.168.39.42:34567, 192.168.39.42 is the minikube ip & 34567 is the nodeport. Run the command "minikube ip" to get minikube ip   
+> * And https://5e06-202-74-48-126.ngrok-free.app is the public address for our deployed App running on http://192.168.39.42:34567    
+> * Each time the HTTP Tunnel is stopped and restarted, the public address is expected to change.
