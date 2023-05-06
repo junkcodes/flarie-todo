@@ -162,7 +162,7 @@ The purpose of this Bangla Style implementation, is to utilize native Linux syst
 ```
 
 #### deploy-via-ssh-geeky-style
-The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. Here, we mainly followed [SCP Command to Transfer Files](https://github.com/marketplace/actions/scp-command-to-transfer-files),[SSH Remote Commands](https://github.com/marketplace/actions/ssh-remote-commands) GitHub Actions for implementation as referred by the following,
+The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. Here, we mainly followed [SCP Command to Transfer Files](https://github.com/marketplace/actions/scp-command-to-transfer-files), [SSH Remote Commands](https://github.com/marketplace/actions/ssh-remote-commands) GitHub Actions for implementation as referred by the following,
 ```
   deploy-via-ssh-geeky-style:
     needs: build-image-geeky-style
