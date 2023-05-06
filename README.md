@@ -11,21 +11,30 @@ The process of dockerizing and deploying a Nodejs App to Kubernetes through CI/C
 
 ## Fork App Repo
 Welcome to this repository, which is a fork of the original [flarie-todo](https://github.com/mistryflarie/flarie-todo) repository. By forking the repository, we have created a copy of the codebase that we can use for our own purposes.  
-If you're interested in forking a repository yourself, GitHub provides documentation on how to do so in their [Fork a Repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) guide.
+If you're interested in forking a repository yourself, GitHub provides documentation on how to do so in their [Fork a Repo](https://docs.github.com/en/get-started/quickstart/fork-a-repo) guide.  
+
 
 ## Install & Config Minikube as Local Kubernetes
-To deploy our Nodejs App, we will use Minikube as our local Kubernetes cluster. As we don't have access to any cloud Kubernetes, this will allow us to deploy and test our app. To install Minikube locally on your machine, you can follow the official installation guide provided at [Start with Minikube](https://minikube.sigs.k8s.io/docs/start/). The guide outlines the steps to install the necessary dependencies and set up Minikube for your operating system.   
+To deploy our Nodejs App, we have installed and configured Minikube as our local Kubernetes cluster. As we don't have access to any cloud Kubernetes, this will allow us to deploy and test our app. To install Minikube locally on your machine, you can follow the official installation guide provided at [Start with Minikube](https://minikube.sigs.k8s.io/docs/start/). The guide outlines the steps to install the necessary dependencies and set up Minikube for your operating system.   
 Before starting minikube, we need to ensure that our dockerized application can be deployed in our local Kubernetes and exposed using a NodePort service on port 34567. By default, minikube only exposes NodePort service ports in the range of 30000-32767, so we need to extend the port range by running the following command while starting the minikube locally:
 ```
 minikube start --vm-driver=kvm2 --extra-config=apiserver.service-node-port-range=30000-35678
 ```
 Here,
 > --vm-driver, refers to the installed and configured virtualization technology driver to be used for the minikube cluster. For more info, follow [Minikube Drivers](https://minikube.sigs.k8s.io/docs/drivers/).    
-> service-node-port-range, refers to the required NodePort service port range to be used for the minikube cluster.
+> service-node-port-range, refers to the required NodePort service port range to be used for the minikube cluster.  
+
 
 ## Deploy Required DB for App
 The forked Nodejs App is designed to work with either MySQL or SQLite DB. While SQLite is a server-less database and can be used in certain scenarios, for the purpose of providing a detailed and comprehensive technical demonstration, MySQL is preferred. To deploy MySQL to our local kubernetes, I have used the following kubernetes manifest file referred as [k8s-manifest/mysql-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/mysql-deployment.yml).    
 For configuring and deploying a MySQL database instance on Kubernetes, you can use the manifest file provided earlier. Otherwise for a more detailed guide, you can refer to the following link, [Run a Single-Instance Stateful MySQL Application](https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/)
+
+> The current version of MySQL 8 and the mysqljs npm package utilized in this application are currently facing authentication issues. This is because MySQL 8 is now using the caching_sha2_password pluggable authentication method as the default instead of the mysql_native_password, which is supported by the mysqljs package. To overcome this issue, get a shell into the running MySQL pod, login to MySQL as root and run the following command,
+> ```
+> ALTER USER 'username'@'%' IDENTIFIED WITH mysql_native_password BY 'password';
+> FLUSH PRIVILEGES;
+> ```
+
 
 ## Prepare Dockerfile for App
 To dockerize the Nodejs App, I authored the Dockerfile referred as [dockerfile/Dockerfile](https://github.com/junkcodes/flarie-todo/blob/main/dockerfile/Dockerfile). The Dockerfile contains the following,
@@ -38,10 +47,13 @@ RUN npm install
 EXPOSE 3000
 CMD ["node","index.js"]
 ```
-For a more comprehensive guide to dockerize a Nodejs app, please refer to [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp)
+For a more comprehensive guide to dockerize a Nodejs app, please refer to [Dockerizing a Node.js web app](https://nodejs.org/en/docs/guides/nodejs-docker-webapp).   
+
 
 ## Prepare Kubernetes Manifest for App
-In order to deploy the Nodejs App in local Kubernetes, I have created a manifest file that you can find at [k8s-manifest/app-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/app-deployment.yml). This manifest file defines both the Deployment and NodePort Service for the App with all the necessary configurations. By using this manifest file, we can quickly and easily deploy the application to Kubernetes cluster without having to manually configure all the necessary components.
+In order to deploy the Nodejs App in local Kubernetes, I have created a manifest file that you can find at [k8s-manifest/app-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/app-deployment.yml).    
+The manifest file defines both the Deployment and NodePort Service for the App with all the necessary configurations. By using this manifest file, we can quickly and easily deploy the application to Kubernetes cluster without having to manually configure all the necessary components.   
+
 
 ## Expose Local Machine for Remote SSH
 To enable continuous deployment of our App using minikube on a local machine, we need to expose the machine for Remote SSH. This can be done by utilizing a tool known as Ngrok, which is a multi-platform tunnelling and reverse proxy software that creates secure tunnels from a public endpoint to a network service running locally. To install and set up Ngrok, you can follow the steps outlined in the following link: [Getting Started with ngrok](https://ngrok.com/docs/getting-started/).    
@@ -66,7 +78,8 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 ```
 Here,
 > tcp://0.tcp.in.ngrok.io:14593 forwards all TCP requests to localhost:22   
-> For SSH connection through TCP Tunnel tcp://0.tcp.in.ngrok.io:14593, provide HOSTNAME as 0.tcp.in.ngrok.io & PORT as 14593
+> For SSH connection through TCP Tunnel tcp://0.tcp.in.ngrok.io:14593, provide HOSTNAME as 0.tcp.in.ngrok.io & PORT as 14593  
+
 
 ## Prepare GitHub Workflows Action file (Dockerization & Deployment)
 Once all the necessary prerequisites and dependencies were in place, I created a CI/CD Workflow Action file called [.github/workflows/cicd.yml](https://github.com/junkcodes/flarie-todo/blob/main/.github/workflows/cicd.yml). This file automates the Dockerization and Deployment process to the local kubernetes, triggered by every push or merge request.
@@ -115,6 +128,7 @@ The purpose of this Geeky Style implementation, is to maximize the use of prebui
           push: true
           tags: junkcodes/flarie:gs
 ```
+
 
 ### deploy-via-ssh-(bangla-style/geeky-style)
 The following job establishes SSH connection to our local machine to transfer the Kubernetes Manifest [k8s-manifest/app-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/app-deployment.yml), and then executes the Manifest to properly deploy the dockerized App to the local kubernetes. Two different ways of implementing this job are described below.
@@ -176,6 +190,7 @@ The purpose of this Geeky Style implementation, is to maximize the use of prebui
         port: 12904
         script: kubectl apply -f /tmp/app-deployment.yml -n flarie
 ```
+
 
 ## Expose App to Public Internet
 After successfully creating and configuring the Github Workflows Action, the Nodejs App is ready to be dockerized and deployed automatically triggered by every push or merge request. The deployed App can be accessed locally using the address http://minikubeip:34567.   
