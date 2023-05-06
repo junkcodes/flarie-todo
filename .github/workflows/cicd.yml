@@ -62,9 +62,9 @@ jobs:
           StrictHostKeyChecking no
         END
     - name: Transfer K8s Manifest file for the App 
-      run: scp -P 12904  k8s-manifest/app-deployment.yml vm:/tmp
+      run: scp -P 11321  k8s-manifest/app-deployment.yml vm:/tmp
     - name: Deploy App to the Kubernetes
-      run: ssh -p 12904 vm "kubectl apply -f /tmp/app-deployment.yml -n flarie"
+      run: ssh -p 11321 vm "kubectl apply -f /tmp/app-deployment.yml -n flarie"
 
 
 #   deploy-via-ssh-geeky-style:
@@ -81,7 +81,7 @@ jobs:
 #         host: 0.tcp.in.ngrok.io
 #         username: groot
 #         key_path: vm.key 
-#         port: 12904
+#         port: 11321
 #         source: "k8s-manifest/app-deployment.yml"
 #         target: /tmp
 #         strip_components: 1
@@ -91,5 +91,5 @@ jobs:
 #         host: 0.tcp.in.ngrok.io
 #         username: groot
 #         key_path: vm.key 
-#         port: 12904
+#         port: 11321
 #         script: kubectl apply -f /tmp/app-deployment.yml -n flarie
