@@ -16,6 +16,7 @@ If you're interested in forking a repository yourself, GitHub provides documenta
 
 ## Install & Config Minikube as Local Kubernetes
 To deploy our Nodejs App, we have installed and configured Minikube as our local Kubernetes cluster. As we don't have access to any cloud Kubernetes, this will allow us to deploy and test our app. To install Minikube locally on your machine, you can follow the official installation guide provided at [Start with Minikube](https://minikube.sigs.k8s.io/docs/start/). The guide outlines the steps to install the necessary dependencies and set up Minikube for your operating system.   
+     
 Before starting minikube, we need to ensure that our dockerized application can be deployed in our local Kubernetes and exposed using a NodePort service on port 34567. By default, minikube only exposes NodePort service ports in the range of 30000-32767, so we need to extend the port range by running the following command while starting the minikube locally:
 ```
 minikube start --vm-driver=kvm2 --extra-config=apiserver.service-node-port-range=30000-35678
