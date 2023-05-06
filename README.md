@@ -193,7 +193,7 @@ The purpose of this Geeky Style implementation, is to maximize the use of prebui
 
 
 ## Expose App to Public Internet
-After successfully creating and configuring the Github Workflows Action, the Nodejs App is ready to be dockerized and deployed automatically triggered by every push or merge request. The deployed App can be accessed locally using the address http://minikubeip:34567.   
+After successfully creating and configuring the Github Workflows Action, the Nodejs App is ready to be dockerized and deployed automatically triggered by every push or merge request. The deployed App can be accessed locally using the address http://minikubeip:nodeport.   
 However, wouldn't it be even more awesome if the app could be accessed on the public internet? To achieve this, we can utilize Ngrok to expose the Nodejs Web App using HTTP tunnels. Simply run the following command:
 ```
 $ ngrok http http://192.168.39.42:34567
@@ -213,5 +213,5 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
                               0       0       0.00    0.00    0.00    0.00                                                                                  
 ```
 Here,
-> For, ngrok http http://192.168.39.42:34567, 192.168.39.42 is the minikube ip. Run the command "minikube ip" to get minikube ip.   
+> For, ngrok http http://192.168.39.42:34567, 192.168.39.42 is the minikube ip & 34567 is the nodeport. Run the command "minikube ip" to get minikube ip.   
 > And https://5e06-202-74-48-126.ngrok-free.app is the public address for our deployed App running on http://192.168.39.42:34567
