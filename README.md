@@ -215,5 +215,5 @@ Connections                   ttl     opn     rt1     rt5     p50     p90
 ```
 Here,
 > * For, ngrok http http://192.168.39.42:34567, 192.168.39.42 is the minikube ip & 34567 is the nodeport. Run the command "minikube ip" to get minikube ip   
-> * And https://5e06-202-74-48-126.ngrok-free.app is the public address for our deployed App running on http://192.168.39.42:34567    
+> * https://5e06-202-74-48-126.ngrok-free.app is the public address for our deployed App running on http://192.168.39.42:34567    
 > * Each time the HTTP Tunnel is stopped and restarted, the public address is expected to change.
