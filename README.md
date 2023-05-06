@@ -107,23 +107,23 @@ The purpose of this Bangla Style implementation, is to utilize native Linux syst
       run: docker push junkcodes/flarie:bs
 ```
 #### build-image-geeky-style
-The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. The implementation is referred by the following,
+The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. Here, we mainly followed [Build and push Docker images](https://github.com/marketplace/actions/build-and-push-docker-images) GitHub Action for implementation as referred by the following,
 ```
   build-image-geeky-style:
     name: Build and Push App Image to Registry Geeky Style
     runs-on: ubuntu-latest
     steps:
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
+        uses: docker/setup-qemu-action@v2     #Docker Setup QEMU Github Action
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v2   #Docker Setup Buildx Github Action
       - name: Login to Docker Hub
-        uses: docker/login-action@v2
+        uses: docker/login-action@v2          #Docker Login Github Action
         with:
           username: junkcodes
           password: ${{ secrets.DOCKERPW }}
       - name: Build and Push App Image
-        uses: docker/build-push-action@v4
+        uses: docker/build-push-action@v4    #Build and push Docker images Github Action
         with:
           file: dockerfile/Dockerfile
           push: true
@@ -162,7 +162,7 @@ The purpose of this Bangla Style implementation, is to utilize native Linux syst
 ```
 
 #### deploy-via-ssh-geeky-style
-The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. The implementation is referred by the following,
+The purpose of this Geeky Style implementation, is to maximize the use of prebuilt GitHub Actions. Here, we mainly followed [SCP Command to Transfer Files](https://github.com/marketplace/actions/scp-command-to-transfer-files),[SSH Remote Commands](https://github.com/marketplace/actions/ssh-remote-commands) GitHub Actions for implementation as referred by the following,
 ```
   deploy-via-ssh-geeky-style:
     needs: build-image-geeky-style
@@ -172,8 +172,9 @@ The purpose of this Geeky Style implementation, is to maximize the use of prebui
     - uses: actions/checkout@v3
     - name: Prepare SSH Key
       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key
+      
     - name: Transfer K8s Manifest file for the App 
-      uses: appleboy/scp-action@v0.1.4
+      uses: appleboy/scp-action@v0.1.4                        #SCP Command to Transfer Files Github Action
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
@@ -183,7 +184,7 @@ The purpose of this Geeky Style implementation, is to maximize the use of prebui
         target: /tmp
         strip_components: 1
     - name: Deploy App to the Kubernetes
-      uses: appleboy/ssh-action@v0.1.10
+      uses: appleboy/ssh-action@v0.1.10                       #SSH Remote Commands Github Action
       with:
         host: 0.tcp.in.ngrok.io
         username: groot
