@@ -13,7 +13,7 @@ jobs:
     name: Build and Push App Image to Registry Bangla Style
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3                   #Checkout Github Action
     - name: Login to Registry
       run: echo "${{ secrets.DOCKERPW }}" | docker login -u "junkcodes" --password-stdin
     - name: Build Image
@@ -27,16 +27,16 @@ jobs:
 #     runs-on: ubuntu-latest
 #     steps:
 #       - name: Set up QEMU
-#         uses: docker/setup-qemu-action@v2
+#         uses: docker/setup-qemu-action@v2                     #Docker Setup QEMU Github Action
 #       - name: Set up Docker Buildx
-#         uses: docker/setup-buildx-action@v2
+#         uses: docker/setup-buildx-action@v2                   #Docker Setup Buildx Github Action
 #       - name: Login to Docker Hub
-#         uses: docker/login-action@v2
+#         uses: docker/login-action@v2                          #Docker Login Github Action
 #         with:
 #           username: junkcodes
 #           password: ${{ secrets.DOCKERPW }}
 #       - name: Build and Push App Image
-#         uses: docker/build-push-action@v4
+#         uses: docker/build-push-action@v4                     #Build and push Docker images Github Action
 #         with:
 #           file: dockerfile/Dockerfile
 #           push: true
@@ -75,8 +75,9 @@ jobs:
 #     - uses: actions/checkout@v3
 #     - name: Prepare SSH Key
 #       run: echo "${{ secrets.SSH_PRIVATE_KEY }}" | base64 -d > vm.key
+#
 #     - name: Transfer K8s Manifest file for the App 
-#       uses: appleboy/scp-action@v0.1.4
+#       uses: appleboy/scp-action@v0.1.4                      #SCP Command to Transfer Files Github Action
 #       with:
 #         host: 0.tcp.in.ngrok.io
 #         username: groot
@@ -86,7 +87,7 @@ jobs:
 #         target: /tmp
 #         strip_components: 1
 #     - name: Deploy App to the Kubernetes
-#       uses: appleboy/ssh-action@v0.1.10
+#       uses: appleboy/ssh-action@v0.1.10                     #SSH Remote Commands Github Action
 #       with:
 #         host: 0.tcp.in.ngrok.io
 #         username: groot
