@@ -22,8 +22,8 @@ Before starting minikube, we need to ensure that our dockerized application can 
 minikube start --vm-driver=kvm2 --extra-config=apiserver.service-node-port-range=30000-35678
 ```
 Here,
-> --vm-driver, refers to the installed and configured virtualization technology driver to be used for the minikube cluster. For more info, follow [Minikube Drivers](https://minikube.sigs.k8s.io/docs/drivers/).    
-> service-node-port-range, refers to the required NodePort service port range to be used for the minikube cluster.  
+> * --vm-driver, refers to the installed and configured virtualization technology driver to be used for the minikube cluster. For more info, follow [Minikube Drivers](https://minikube.sigs.k8s.io/docs/drivers/).    
+> * service-node-port-range, refers to the required NodePort service port range to be used for the minikube cluster.  
 
 
 ## Deploy Required DB for App
