@@ -98,7 +98,7 @@ The purpose of this Bangla Style implementation, is to utilize native Linux syst
     name: Build and Push App Image to Registry Bangla Style
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v3                       #Checkout Github Action
     - name: Login to Registry
       run: echo "${{ secrets.DOCKERPW }}" | docker login -u "junkcodes" --password-stdin
     - name: Build Image
