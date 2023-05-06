@@ -38,7 +38,7 @@ For configuring and deploying a MySQL database instance on Kubernetes, you can u
 
 
 ## Prepare Dockerfile for App
-To dockerize the Nodejs App, I authored the Dockerfile referred as [dockerfile/Dockerfile](https://github.com/junkcodes/flarie-todo/blob/main/dockerfile/Dockerfile). The Dockerfile contains the following,
+To dockerize the Nodejs App, we have authored the Dockerfile referred as [dockerfile/Dockerfile](https://github.com/junkcodes/flarie-todo/blob/main/dockerfile/Dockerfile). The Dockerfile contains the following,
 ```
 FROM node:lts
 WORKDIR /app
