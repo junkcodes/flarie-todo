@@ -27,7 +27,7 @@ Here,
 
 
 ## Deploy Required DB for App
-The forked Nodejs App is designed to work with either MySQL or SQLite DB. While SQLite is a server-less database and can be used in certain scenarios, for the purpose of providing a detailed and comprehensive technical demonstration, MySQL is preferred. To deploy MySQL to our local kubernetes, I have used the following kubernetes manifest file referred as [k8s-manifest/mysql-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/mysql-deployment.yml).    
+The forked Nodejs App is designed to work with either MySQL or SQLite DB. While SQLite is a server-less database and can be used in certain scenarios, for the purpose of providing a detailed and comprehensive technical demonstration, MySQL is preferred. To deploy MySQL to our local kubernetes, we have used the following kubernetes manifest file referred as [k8s-manifest/mysql-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/mysql-deployment.yml).    
 For configuring and deploying a MySQL database instance on Kubernetes, you can use the manifest file provided earlier. Otherwise for a more detailed guide, you can refer to the following link, [Run a Single-Instance Stateful MySQL Application](https://kubernetes.io/docs/tasks/run-application/run-single-instance-stateful-application/)
 
 > * The current version of MySQL 8 and the mysqljs npm package utilized in this application are currently facing authentication issues. This is because MySQL 8 is now using the caching_sha2_password pluggable authentication method as the default instead of the mysql_native_password, which is supported by the mysqljs package. To overcome this issue, get a shell into the running MySQL pod, login to MySQL as root and run the following command,
@@ -52,7 +52,7 @@ For a more comprehensive guide to dockerize a Nodejs app, please refer to [Docke
 
 
 ## Prepare Kubernetes Manifest for App
-In order to deploy the Nodejs App in local Kubernetes, I have created a manifest file that you can find at [k8s-manifest/app-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/app-deployment.yml).    
+In order to deploy the Nodejs App in local Kubernetes, we have created a manifest file that you can find at [k8s-manifest/app-deployment.yml](https://github.com/junkcodes/flarie-todo/blob/main/k8s-manifest/app-deployment.yml).    
 The manifest file defines both the Deployment and NodePort Service for the App with all the necessary configurations. By using this manifest file, we can quickly and easily deploy the application to Kubernetes cluster without having to manually configure all the necessary components.   
 
 
@@ -84,7 +84,7 @@ Here,
 
 
 ## Prepare GitHub Workflows Action file (Dockerization & Deployment)
-Once all the necessary prerequisites and dependencies were in place, I created a CI/CD Workflow Action file called [.github/workflows/cicd.yml](https://github.com/junkcodes/flarie-todo/blob/main/.github/workflows/cicd.yml). This file automates the Dockerization and Deployment process to the local kubernetes, triggered by every push or merge request.
+Once all the necessary prerequisites and dependencies were in place, we created a CI/CD Workflow Action file called [.github/workflows/cicd.yml](https://github.com/junkcodes/flarie-todo/blob/main/.github/workflows/cicd.yml). This file automates the Dockerization and Deployment process to the local kubernetes, triggered by every push or merge request.
 
 The action file contains two jobs, both of which have been implemented in two ways for better technical demonstration, as described below:
 * build-image-(bangla-style/geeky-style)
